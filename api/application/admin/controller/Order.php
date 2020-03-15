@@ -46,14 +46,14 @@ class Order extends Error
 			$value['username'] = $user[$value['user_id']];
 			$value['time'] = date('Y-m-d H:i:s',$value['time']);
 
-			// $goods = json_decode($value['order_goods'],true);
-			// foreach ($goods as  $g) {
-			// 	$title[] = $g['cate'].'-'.$g['name'];
-			// }
+			$goods = json_decode($value['order_goods'],true);
+			foreach ($goods as  $g) {
+				$title[] = $g['cate'].'-'.$g['name'];
+			}
 
-			// $value['title'] = join('、'.$title);
+			$value['title'] = join('、',$title);
 
-			// $title = [];
+			$title = [];
 
 			if(in_array($value['status'], [1,2,4,5,6])){
 				$value['status_text'] = $config['order_status'][$value['status']];
@@ -77,6 +77,13 @@ class Order extends Error
 			return [501,'数据错误'];
 		}
 
+		$user = $this->db('user')->where('is_delete',0)->where('id',$info['user_id'])->find();
+		if(!$info){
+			return [501,'用户不存在'];
+		}
+		$info['username'] = $user['username'];
+
+
 		$config = Config::get('constant.');
 
 		$info['affirm'] = $info['affirm'] == 1 ? '已确认' : '未确认';
@@ -84,10 +91,10 @@ class Order extends Error
 		$info['contact'] = json_decode($info['contact'],true);
 		$info['order_goods'] = json_decode($info['order_goods'],true);
 
-		// foreach ($info['order_goods']  as  $v) {
-		// 		$title[] = $v['cate'].':'.$v['name'];
-		// 	}
-		
+		foreach ($info['order_goods']  as  $v) {
+				$title[] = $v['cate'].':'.$v['name'];
+			}
+		$info['title'] = join('、',$title);
 
 		if(in_array($info['status'], [1,2,4,5,6])){
 			$info['status_text'] = $config['order_status'][$info['status']];

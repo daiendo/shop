@@ -11,17 +11,17 @@
                     </div>
                     <div class="layout-nav">
                          <MenuItem name="2">
-                            <Avatar></Avatar>  
+                            <Avatar :src='userInfo.head_url'></Avatar>  
                         </MenuItem>
                         <MenuItem name="1">
                             <Dropdown>
                                 <a href="javascript:void(0)">
-                                    下拉菜单
+                                    {{userInfo.username}}
                                     <Icon type="ios-arrow-down"></Icon>
                                 </a>
                                 <DropdownMenu slot="list">
-                                    <DropdownItem>修改密码</DropdownItem>
-                                    <DropdownItem>注销登录</DropdownItem>
+                                    <DropdownItem @click.native="change = true">修改密码</DropdownItem>
+                                    <DropdownItem @click.native='out'>注销登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
                         </MenuItem>
@@ -59,15 +59,15 @@
                                 <Icon type="ios-calendar-outline" />
                                 评论
                             </MenuItem>
-                            <MenuItem name="6" :to="{name:'user'}">
+                            <MenuItem name="6" :to="{name:'order'}">
                                 <Icon type="ios-cart-outline" />
                                 订单
                             </MenuItem>
-                            <MenuItem name="7" :to="{name:'user'}">
+                            <MenuItem name="7" :to="{name:'advert'}">
                                 <Icon type="ios-eye-outline" />
                                 广告
                             </MenuItem>
-                            <MenuItem name="8" :to="{name:'user'}">
+                            <MenuItem name="8" :to="{name:'system'}">
                                 <Icon type="md-link" />
                                 系统
                             </MenuItem>
@@ -82,32 +82,110 @@
             </Layout>
             <Footer>copyright 2019 &copy; daiend 陇ICP证18002472号</Footer>
         </Layout>
+        <Modal title="修改密码" @on-ok="changePass" v-model="change">
+            <Form :model="form">
+                <FormItem>
+                    <Input type="password" v-model="form.oldpassword" placeholder="请输入旧密码">
+                        <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                    </Input>
+                </FormItem>
+                <FormItem>
+                    <Input type="password" v-model="form.password" placeholder="请输入新密码">
+                        <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                    </Input>
+                </FormItem>
+                <FormItem>
+                    <Input type="password" v-model="form.repassword" placeholder="请确认密码">
+                        <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                    </Input>
+                </FormItem>
+            </Form>
+        </Modal>
     </div>
 </template>
 <script>
     export default {
         data(){
             return {
+                change:false,
+                userInfo:{
+                    id:0,
+                    username:'',
+                    head_url:'',
+                    login_time:'',
+                },
+                form:{
+                    oldpassword:'',
+                    password:'',
+                    repassword:''
+                },
+                header:{
+                    title:'',
+                    logo:'',
+                    keywords:'',
+                    description:''
+                }
             }
         },
         mounted(){
-
+            this.getInfo();
+            this.getHeader();
         },
         computed:{
             
         },
         methods:{
-            // change:function(){ 
-            //     console.log(1)
-            //     let eleArr =this.$refs.activePre.$children
-            //     for(let i=0;i<eleArr.length;i++){
-            //         console.log(eleArr[i].active)
-            //         if(eleArr[i].active == true){
-            //         this.activeNa = eleArr[i].name;
-            //         console.log(this.$refs.activePre.$children)
-            //         }
-            //     }
-            // }
+            async getHeader(){
+                let res = await this.api.system.getHeader();
+                if(res){
+                    this.header = res;
+                }
+            },
+            async getInfo(){
+                let res = await this.api.common.loginInfo();
+                if(res){
+                    this.$Message.success('登陆成功');
+                    this.userInfo = res;
+                }
+            },
+            async changePass(){
+                await this.api.common.changePass(this.form)
+                this.clear()
+            },
+            async out(){
+                await this.api.common.out()
+            },
+            clear(){
+                this.form = {
+                    oldpassword:'',
+                    password:'',
+                    repassword:''
+                }
+            }
+        },
+
+        
+        metaInfo(){
+            return {
+                title:this.header.title,
+                meta:[
+                    {
+                        name:'keywords',
+                        content:this.header.keywords
+                    },
+                    {
+                        name:'description',
+                        content:this.header.description
+                    }
+                ],
+                link:[
+                   {
+                        href:this.header.logo,
+                        rel:'icon',
+                        type:'image/x-icon'
+                   }
+                ]
+            }
         }
     }
 </script>

@@ -26,7 +26,7 @@
         >
         </Page> -->
 
-        <TableList title="商品评论" :right ='24' :columns='columns' :getData='list1' ref="tableData">
+        <TableList title="商品评论" :right ='24' :columns='columns' :getData='list' ref="tableData">
             <Form inline slot='head-right'>
                 <FormItem>
                     <Input v-model="search.value" placeholder="Enter something..." style="width: 300px" >
@@ -155,7 +155,7 @@ import TableList from '@/components/table.vue'
            
 
            //组件化
-             list1(param){
+             list(param){
                 param[this.search.type] = this.search.value;
                 return [this.api.comment.list,param]
             },

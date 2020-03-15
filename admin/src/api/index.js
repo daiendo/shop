@@ -70,6 +70,74 @@ let api = {
         delete:id => {
             return ajax.post('comment/delete',id);
         },
+    },
+    order:{
+        list:param =>{
+            return ajax.post('order/list',param);
+        }, 
+        delete:id => {
+            return ajax.post('order/delete',id);
+        },
+        info:id =>{
+            return ajax.post('order/info',id);
+        }, 
+        changeStatus:param => {
+            return ajax.post('order/changeStatus',param);
+        },
+    },
+    advert:{
+        list:param =>{
+            return ajax.post('advert/list',param);
+        }, 
+        delete:id => {
+            return ajax.post('advert/delete',id);
+        },
+        detail:id =>{
+            return ajax.post('advert/info',id);
+        }, 
+        update:param => {
+            return ajax.post('advert/update',param);
+        },
+        insert:param => {
+            return ajax.post('advert/insert',param);
+        }
+    },
+    system:{
+        list:param =>{
+            return ajax.post('system/list',param);
+        }, 
+        delete:id => {
+            return ajax.post('system/delete',id);
+        },
+        detail:id =>{
+            return ajax.post('system/info',id);
+        }, 
+        update:param => {
+            return ajax.post('system/update',param);
+        },
+        insert:param => {
+            return ajax.post('system/insert',param);
+        },
+        show:id => {
+            return ajax.post('system/show',id);
+        },
+        getHeader: ()=> {
+            return ajax.post('system/getHeader');
+        },
+    },
+    common:{
+        login:param =>{
+            return ajax.post('common/login',param);
+        }, 
+        loginInfo:() => {
+            return ajax.post('common/loginInfo');
+        },
+        out:() =>{
+            return ajax.post('common/out');
+        }, 
+        changePass:param => {
+            return ajax.post('common/changePass',param);
+        },
     }
 }
 export default {

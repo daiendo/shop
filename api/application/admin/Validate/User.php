@@ -22,7 +22,7 @@ class User extends Validate
 	protected $scene = [
 		'insert'=>['username','head_url','admin','status','password','repassword'],
 		'update'=>['id','username','head_url','admin','status','password','repassword'] ,
-		'changePass'=>['id','oldpassword','password','repassword'],
+		'changePass'=>['oldpassword','password','repassword'],
 		'info'=>['id'],
 	];
 

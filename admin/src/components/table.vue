@@ -76,6 +76,7 @@ export default {
                     data:[]
                 }
             }
+            return this.data;
         }
     }
 }

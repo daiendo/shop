@@ -63,7 +63,7 @@
     
      <PictureView :is_show='picture.is_show' :src='picture.src' @closePicture="picture.is_show=false"></PictureView>
 
-    <Modal :title="operation.title" v-model="operation.is_show" @on-ok ="ok">
+    <Modal :title="operation.title" v-model="operation.is_show" @on-ok ="ok" @on-cancel="cancel">
 
         <Form :model='form' :label-width='100'>
             <FormItem label="商品名称">
@@ -71,7 +71,7 @@
             </FormItem>
             <FormItem label="商品分类">
                 <Select v-model="form.class_id">
-                    <Option v-for="(item,index) in category" :value="item.id" :key="index" :disabled="item.parent_id == 0 ? true : false">
+                    <Option v-for="(item,index) in category" :value="item.id" :key="index" >
                         {{item.name}}
                     </Option>
                 </Select>
@@ -300,7 +300,7 @@ import PictureView from '@/components/pictureView.vue'
                 this.operation.is_show = true;
                 this.operation.title = '添加商品';
                   this.categoryList()
-                  console.log(this.form.id)
+                //   console.log(this.form.id)
             },
             uploadSuccess(res){
                 if(res.ret == 200){
@@ -310,6 +310,9 @@ import PictureView from '@/components/pictureView.vue'
                     return false
                     
                 }
+            },
+            cancel(){
+                this.clear()
             },
             async ok(){
                 if(this.form.id > 0){
@@ -346,6 +349,7 @@ import PictureView from '@/components/pictureView.vue'
                     imgs:[],
                     desc:''
                 };
+                this.$refs.uploadfile.clearFiles()
                 this.list()
             },
             async list(page = 1){

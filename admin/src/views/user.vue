@@ -16,13 +16,44 @@
                     <FormItem>
                         <Button type="info" shape="circle" icon="ios-search" @click="list"></Button>
                     </FormItem>
+                    
                 </Form>
         </Head>
+         <!-- <h3>用户列表</h3>
+        <Divider></Divider>
+        <Row>
+            <Col :span ='6' class='admin-operation'>
+                <Button type="info" @click="add">添加用户</Button>
+            </Col>
+            <Col :span ='18' class='admin-search'>
+                <Form inline>
+                    <FormItem>
+                        <Input v-model="search.value" placeholder="Enter something..." style="width: 300px" >
+                            <Select v-model="search.type" slot="prepend" style="width:100px">
+                                <Option v-for='(item ,index) in searchList' :key='index' :value="item.value">
+                                    {{item.title}}
+                                </Option>
+                            </Select>
+                        </Input>
+                    </FormItem>
+                    <FormItem>
+                        <Button type="info" shape="circle" icon="ios-search" @click="list"></Button>
+                    </FormItem>
+                    
+                </Form>
+            
+            </Col>
+        </Row> -->
+          
     </div>
     <Table border stripe :columns="columns1" :data="data1.data">
         <template slot-scope="{ row }" slot="head">
+            <!-- <strong>{{ row.username }}</strong> -->
             <img :src='row.head_url' alt="#" width="80px" height="40px" @click="picture.is_show = true;picture.src = row.head_url">
         </template>
+        <!-- <template slot-scope="{ row, index }" slot="status">
+            <Button :type="btnType" size="small" style="margin-right: 5px" @click="changeUserStatus(row,index)">forbidden</Button>
+        </template> -->
         <template slot-scope="{ row}" slot="delete">
             <Button type="warning" size="small" @click="change(row.id)" style="margin:4px">Change</Button>
             <Button type="error" size="small" @click="remove(row.id)" style="margin:4px">Delete</Button>
@@ -139,6 +170,7 @@ import PictureView from '@/components/pictureView.vue'
                     {
                         title: 'status',
                         key: 'status',
+                        // slot: 'status',
                         render : (h,param) =>{
                             let btnType = 'primary';
                             if(param.row.status == 2){
@@ -156,6 +188,7 @@ import PictureView from '@/components/pictureView.vue'
                                         if(param.row.status == 1){
                                             status_text = 'forbidden'
                                             status = 2
+                                            // console.log(this.style)
                                         }
                                         this.$Modal.confirm({
                                             title:'提示',
@@ -208,6 +241,9 @@ import PictureView from '@/components/pictureView.vue'
                let res = await this.api.user.list(param);
                if(res){
                    this.data1 = res;
+                //    console.log(res.total)
+                //    this.total = res.total
+                //    console.log(this.data1.total)
                }
             },
            async changeUserStatus (id) {
@@ -275,11 +311,13 @@ import PictureView from '@/components/pictureView.vue'
                 
                 if(res.ret == 200){
                     this.form.head_url = res.data
+                    // console.log(form)
                 }
             },
             change(id){
                 this.info.is_show=true;
                 this.info.title = '修改'
+                // console.log(id)
                 this.form.id = id
                 this.detail(id)
             }
